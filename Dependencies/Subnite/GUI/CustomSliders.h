@@ -1,8 +1,9 @@
 #pragma once
 #include <functional>
 #include <string>
-#include "../Commons/ValueTreeManager.h"
 #include <juce_gui_basics/juce_gui_basics.h>
+#include <juce_graphics/juce_graphics.h>
+#include "../Commons/ValueTreeManager.h"
 
 namespace subnite {
 

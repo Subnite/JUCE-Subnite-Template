@@ -1,8 +1,7 @@
-Builds/
-Build/
 build/
-builds/
 bin/
-.vscode/
-.cache/
-*.filtergraph
+.vscode/**/*
+!.vscode/c_cpp_properties.json
+
+# when copying into this dir it will have the name MyPlugin.vst3/
+*.vst3/

@@ -1,0 +1,24 @@
+{
+  "env": {
+    "myIncludePath": ["${workspaceFolder}/Source", "${workspaceFolder}/Dependencies", "/home/subnite/dev/.packages/JUCE/8.0.8/modules"],
+    // "myDefines": ["DEBUG", "MY_FEATURE=1"]
+    "myDefines": []
+  },
+  "configurations": [
+    {
+      "name": "Linux",
+      "compilerPath": "/run/current-system/sw/bin/g++",
+      "intelliSenseMode": "linux-gcc-x64",
+      "includePath": ["${myIncludePath}", "${workspaceFolder}/**"],
+      "defines": ["${myDefines}"],
+      "cStandard": "c17",
+      "cppStandard": "c++23",
+    //   "macFrameworkPath": ["/System/Library/Frameworks", "/Library/Frameworks"],
+      "browse": {
+        "path": ["${myIncludePath}", "${workspaceFolder}"]
+      }
+    }
+  ],
+  "version": 4,
+  "enableConfigurationSquiggles": true
+}

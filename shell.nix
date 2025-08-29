@@ -10,6 +10,7 @@ pkgs.mkShell {
     curl
     webkitgtk_4_1  # For webkit-based components :cite[1]
     libsysprof-capture # still figuring it out
+    pcre2
 
     # X11 libraries for GUI components
     xorg.libX11
@@ -30,6 +31,7 @@ pkgs.mkShell {
     cmake
     pkg-config     # Necessary for locating headers/libs :cite[1]:cite[10]
     gcc
+#    binutils
     gnumake
   ];
 
@@ -38,21 +40,12 @@ pkgs.mkShell {
   env = {
     # Point pkg-config to necessary libraries
     PKG_CONFIG_PATH = "${pkgs.webkitgtk_4_1}/lib/pkgconfig:${pkgs.alsa-lib}/lib/pkgconfig";
-
-    # Set LTO-compatible tools
-    AR = "${pkgs.gcc}/bin/gcc-ar";
-    RANLIB = "${pkgs.gcc}/bin/gcc-ranlib";
-    NM = "${pkgs.gcc}/bin/gcc-nm";
   };
 
   # Shell hook for setup (optional)
   shellHook = ''
     echo "Entering JUCE audio plugin development environment"
     # Add any custom setup commands here, e.g., setting SDK paths
-
-    export AR="${pkgs.gcc}/bin/ar"
-    export RANLIB="${pkgs.gcc}/bin/ranlib"
-    export NM="${pkgs.gcc}/bin/nm"
-    export SPROF="${pkgs.libsysprof-capture}"
+    export PKG_CONFIG_PATH="${pkgs.webkitgtk_4_1}/lib/pkgconfig:${pkgs.alsa-lib}/lib/pkgconfig";
   '';
 }

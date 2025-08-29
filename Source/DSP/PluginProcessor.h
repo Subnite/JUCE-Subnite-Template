@@ -7,8 +7,8 @@
 */
 
 #pragma once
-#include "Commons/PluginValueTree.h"
 #include <juce_audio_processors/juce_audio_processors.h>
+#include "Commons/PluginValueTree.h"
 
 //==============================================================================
 
