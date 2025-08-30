@@ -9,7 +9,7 @@
       "name": "Linux",
       "compilerPath": "/run/current-system/sw/bin/g++",
       "intelliSenseMode": "linux-gcc-x64",
-      "includePath": ["${myIncludePath}", "${workspaceFolder}/**"],
+      "includePath": ["${myIncludePath}"],
       "defines": ["${myDefines}"],
       "cStandard": "c17",
       "cppStandard": "c++23",

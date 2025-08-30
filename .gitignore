@@ -9,3 +9,6 @@ Source/Rust/target/**/*
 
 # when copying into this dir it will have the name MyPlugin.vst3/
 *.vst3/
+
+# created from nix flake to point to juce output store path
+result

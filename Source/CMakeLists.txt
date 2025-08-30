@@ -3,28 +3,34 @@ set(JUCE_MODULES_ONLY ON CACHE BOOL "" FORCE)
 endif()
 
 collect_cpp_files(PLUGIN_SOURCE_FILES)
-add_subdirectory(${JUCE_SOURCE_DIR} JUCE)
-message("- [SBNT INFO] Included JUCE at " ${JUCE_SOURCE_DIR})
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    set(PLATFORM_STRING "x86_64-win")
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    set(PLATFORM_STRING "x86_64-linux")
+else()
+    message(FATAL_ERROR "- [SBNT ERROR] Unsupported platform: ${CMAKE_SYSTEM_NAME}")
+endif()
 
 if (${SHOULD_BUILD_LIBRARY})
 add_library(${PLUGIN_STATIC_LIB_NAME} STATIC
-    ${JUCE_SOURCE_DIR}/modules/juce_audio_basics/juce_audio_basics.cpp
-    ${JUCE_SOURCE_DIR}/modules/juce_audio_devices/juce_audio_devices.cpp
-    ${JUCE_SOURCE_DIR}/modules/juce_audio_formats/juce_audio_formats.cpp
-    ${JUCE_SOURCE_DIR}/modules/juce_audio_processors/juce_audio_processors.cpp
-    ${JUCE_SOURCE_DIR}/modules/juce_audio_utils/juce_audio_utils.cpp
-    ${JUCE_SOURCE_DIR}/modules/juce_core/juce_core.cpp
-    ${JUCE_SOURCE_DIR}/modules/juce_data_structures/juce_data_structures.cpp
-    ${JUCE_SOURCE_DIR}/modules/juce_dsp/juce_dsp.cpp
-    ${JUCE_SOURCE_DIR}/modules/juce_events/juce_events.cpp
-    ${JUCE_SOURCE_DIR}/modules/juce_graphics/juce_graphics.cpp
-    ${JUCE_SOURCE_DIR}/modules/juce_gui_basics/juce_gui_basics.cpp
+    ${JUCE_MODULES_PATH}/juce_audio_basics/juce_audio_basics.cpp
+    ${JUCE_MODULES_PATH}/juce_audio_devices/juce_audio_devices.cpp
+    ${JUCE_MODULES_PATH}/juce_audio_formats/juce_audio_formats.cpp
+    ${JUCE_MODULES_PATH}/juce_audio_processors/juce_audio_processors.cpp
+    ${JUCE_MODULES_PATH}/juce_audio_utils/juce_audio_utils.cpp
+    ${JUCE_MODULES_PATH}/juce_core/juce_core.cpp
+    ${JUCE_MODULES_PATH}/juce_data_structures/juce_data_structures.cpp
+    ${JUCE_MODULES_PATH}/juce_dsp/juce_dsp.cpp
+    ${JUCE_MODULES_PATH}/juce_events/juce_events.cpp
+    ${JUCE_MODULES_PATH}/juce_graphics/juce_graphics.cpp
+    ${JUCE_MODULES_PATH}/juce_gui_basics/juce_gui_basics.cpp
 
     ${PLUGIN_SOURCE_FILES}
 )
 
 target_include_directories(${PLUGIN_STATIC_LIB_NAME} PRIVATE
-    ${JUCE_SOURCE_DIR}/modules
+    ${JUCE_MODULES_PATH}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/Dependencies
 )
@@ -108,16 +114,16 @@ target_link_libraries(${PLUGIN_PROJECT_NAME}
         rust_juce_dsp # our rust code if any
     PUBLIC
         juce::juce_recommended_config_flags
-        # juce::juce_recommended_lto_flags # having problems with gcc here
+        $<$<PLATFORM_ID:Windows>:juce::juce_recommended_lto_flags> # problems with gcc on linux...
         juce::juce_recommended_warning_flags
 )
 message("- [SBNT INFO] Linked target libraries")
 
-message("- [SBNT INFO] Modules includes at: ${JUCE_SOURCE_DIR}/modules")
+message("- [SBNT INFO] Modules includes at: ${JUCE_MODULES_PATH}")
 
 target_include_directories(${PLUGIN_PROJECT_NAME}
     PUBLIC
-        "${JUCE_SOURCE_DIR}/modules"
+        "${JUCE_MODULES_PATH}"
         "${CMAKE_CURRENT_SOURCE_DIR}"
         "${CMAKE_CURRENT_SOURCE_DIR}/Rust/target/include"
         "${CMAKE_SOURCE_DIR}/Dependencies"
@@ -130,13 +136,6 @@ set(CMAKE_COLOR_DIAGNOSTICS ON)
 # add command that copies the output to another directory
 get_target_property(VST3_PATH ${PROJECT_NAME}_VST3 JUCE_PLUGIN_ARTEFACT_FILE)
 
-if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-    set(PLATFORM_STRING "x86_64-win")
-elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    set(PLATFORM_STRING "x86_64-linux")
-else()
-    message(FATAL_ERROR "- [SBNT ERROR] Unsupported platform: ${CMAKE_SYSTEM_NAME}")
-endif()
 
 if (${COPY_VST3_AFTER_BUILD})
     foreach(item ${LIST_OF_POST_BUILD_VST3_COPY_PATHS})
@@ -149,7 +148,7 @@ if (${COPY_VST3_AFTER_BUILD})
 
 endif()
 
-if (${COPY_JUCEHEADER_AFTER_BUILD})
+if (DEFINED JUCEHEADER_COPY_DIR)
     juce_generate_juce_header(${PLUGIN_PROJECT_NAME})
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/${PLUGIN_PROJECT_NAME}_artefacts/JuceLibraryCode/JuceHeader.h ${JUCEHEADER_COPY_DIR}

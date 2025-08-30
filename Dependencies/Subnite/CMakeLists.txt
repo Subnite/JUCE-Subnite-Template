@@ -23,11 +23,11 @@ target_link_libraries(SubniteExtras
         # juce::juce_gui_extra
     PUBLIC
         juce::juce_recommended_config_flags
-        # juce::juce_recommended_lto_flags # having problems with gcc here
+        $<$<PLATFORM_ID:Windows>:juce::juce_recommended_lto_flags> # problems with gcc on linux...
         juce::juce_recommended_warning_flags
 )
 
 target_include_directories(SubniteExtras PRIVATE
-    "${JUCE_SOURCE_DIR}/modules"
+    "${JUCE_MODULES_PATH}"
 )
 

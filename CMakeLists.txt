@@ -1,5 +1,5 @@
 # General info
-set(JUCE_SOURCE_DIR "/home/subnite/dev/.packages/JUCE/8.0.8") # set juce source dir (parent of "modules" folder)
+# set(JUCE_SOURCE_OVERRIDE_DIR "/home/subnite/dev/.packages/JUCE/8.0.8") # set juce source dir (parent of "modules" folder), only use this if you can't find the package otherwise
 set(PLUGIN_PROJECT_NAME "MyPlugin") # preferably no spaces
 set(PLUGIN_VST3_NAME "MyPlugin") # name of the actual vst3 file
 
@@ -14,8 +14,7 @@ set(LIST_OF_POST_BUILD_VST3_COPY_PATHS
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-set(COPY_JUCEHEADER_AFTER_BUILD FALSE) # enables, and copies the generated juce header into the selected directory
-set (JUCEHEADER_COPY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Source)
+# set (JUCEHEADER_COPY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Source) # if defined, will generate a juce header and copy it to the provided location
 
 
 # ===========================================================================================
@@ -29,6 +28,14 @@ function(collect_cpp_files out_var)
     file(GLOB_RECURSE cpp_files "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
     set(${out_var} ${cpp_files} PARENT_SCOPE)
 endfunction()
+
+if (DEFINED JUCE_SOURCE_OVERRIDE_DIR)
+    add_subdirectory(${JUCE_SOURCE_OVERRIDE_DIR} JUCE)
+    message("- [SBNT INFO] Included JUCE at " ${JUCE_SOURCE_OVERRIDE_DIR})
+    set(JUCE_MODULES_PATH ${JUCE_SOURCE_OVERRIDE_DIR}/modules)
+else()
+    find_package(JUCE CONFIG REQUIRED)
+endif()
 
 add_subdirectory(Dependencies) # for the deps
 add_subdirectory(Source) # creates the plugin, set other params in there
