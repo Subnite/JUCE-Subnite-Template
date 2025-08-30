@@ -10,7 +10,7 @@ pkgs.mkShell {
     curl
     webkitgtk_4_1  # For webkit-based components :cite[1]
     libsysprof-capture # still figuring it out
-    pcre2
+    pcre2 # also still figuring it out
 
     # X11 libraries for GUI components
     xorg.libX11
@@ -31,8 +31,14 @@ pkgs.mkShell {
     cmake
     pkg-config     # Necessary for locating headers/libs :cite[1]:cite[10]
     gcc
-#    binutils
     gnumake
+
+    # rust (dsp) tools (also pkg-config)
+    openssl
+    # rust-analyzer #-unwrapped
+    rustc
+    cargo
+
   ];
 
 

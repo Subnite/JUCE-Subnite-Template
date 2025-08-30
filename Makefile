@@ -1,13 +1,14 @@
 all: release
 
 # pick whichever compiler you want for release
-release: gcc-r
+release: rust-r gcc-r
 	cmake --build bin --config release
 
 # pick whichever compiler you want for debug
-debug: gcc-d
+debug: rust-d gcc-d
 	cmake --build bin --config debug
 
+# different compilers and optimization levels
 msvc-r: CMakeLists.txt
 	cmake -B bin -G "Visual Studio 17 2022" -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -DCMAKE_BUILD_TYPE=Release
 
@@ -25,3 +26,12 @@ gcc-r: CMakeLists.txt
 
 gcc-d: CMakeLists.txt
 	cmake -B bin -G "Ninja" -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_BUILD_TYPE=Debug
+
+
+# Rust
+
+rust-r: Source/Rust
+	cargo build --release --manifest-path ./Source/Rust/Cargo.toml
+
+rust-d: Source/Rust
+	cargo build --release --manifest-path ./Source/Rust/Cargo.toml

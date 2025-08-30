@@ -9,6 +9,9 @@
 #pragma once
 #include <juce_audio_processors/juce_audio_processors.h>
 #include "Commons/PluginValueTree.h"
+#include "rust-bindings.h"
+
+namespace rs = subnite::rust;
 
 //==============================================================================
 
@@ -59,6 +62,7 @@ public:
 
     // contains all info that is stored and restored from the plugin data block
     myplugin::vt::ValueTree vTree{};
+    rs::Gain* gain;
 private:
 
   size_t sampleRate = 48000;

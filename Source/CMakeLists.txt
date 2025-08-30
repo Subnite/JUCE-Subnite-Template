@@ -46,15 +46,15 @@ target_compile_definitions(${PLUGIN_STATIC_LIB_NAME}
 else()
 
 juce_add_plugin(${PLUGIN_PROJECT_NAME}
-    COMPANY_NAME "Subnite-Plugins"                          # Specify the name of the plugin's author
+    COMPANY_NAME "Subnite Plugins"       # Specify the name of the plugin's author
     IS_SYNTH FALSE                       # Is this a synth or an effect?
     NEEDS_MIDI_INPUT FALSE               # Does the plugin need midi input?
     NEEDS_MIDI_OUTPUT FALSE              # Does the plugin need midi output?
     IS_MIDI_EFFECT FALSE                 # Is this plugin a MIDI effect?
-    PLUGIN_MANUFACTURER_CODE SBNT               # A four-character manufacturer id with at least one upper-case character
-	PLUGIN_CODE Tmpl                            # A unique four-character plugin id with exactly one upper-case character
-    FORMATS VST3                  # The formats to build. Other valid formats are: AAX Unity VST AU AUv3
-    PRODUCT_NAME ${PLUGIN_VST3_NAME}        # The name of the final executable, which can differ from the target name
+    PLUGIN_MANUFACTURER_CODE SBNT        # A four-character manufacturer id with at least one upper-case character
+	PLUGIN_CODE Tmpl                     # A unique four-character plugin id with exactly one upper-case character
+    FORMATS VST3                         # The formats to build. Other valid formats are: AAX Unity VST AU AUv3
+    PRODUCT_NAME ${PLUGIN_VST3_NAME}     # The name of the final executable, which can differ from the target name
 	DESCRIPTION "My plugin description"
     VST3_CATEGORIES "Fx" "Filter" "Pitch Shift" "Stereo"
     COPY_PLUGIN_AFTER_BUILD FALSE
@@ -82,6 +82,11 @@ target_compile_definitions(${PLUGIN_PROJECT_NAME}
 
 message("- [SBNT INFO] Added target compile definitions")
 
+target_link_directories(${PLUGIN_PROJECT_NAME} PUBLIC
+    $<$<CONFIG:Debug>:${CMAKE_CURRENT_SOURCE_DIR}/Rust/target/debug>
+    $<$<CONFIG:Release>:${CMAKE_CURRENT_SOURCE_DIR}/Rust/target/release>
+)
+
 target_link_libraries(${PLUGIN_PROJECT_NAME}
     PRIVATE
         # AudioPluginData           # If we'd created a binary data target, we'd link to it here
@@ -99,7 +104,8 @@ target_link_libraries(${PLUGIN_PROJECT_NAME}
         juce::juce_gui_basics
         juce::juce_gui_extra
 
-        SubniteExtras
+        SubniteExtras # some extra's like a better value tree (with saving set up)
+        rust_juce_dsp # our rust code if any
     PUBLIC
         juce::juce_recommended_config_flags
         # juce::juce_recommended_lto_flags # having problems with gcc here
@@ -113,6 +119,7 @@ target_include_directories(${PLUGIN_PROJECT_NAME}
     PUBLIC
         "${JUCE_SOURCE_DIR}/modules"
         "${CMAKE_CURRENT_SOURCE_DIR}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/Rust/target/include"
         "${CMAKE_SOURCE_DIR}/Dependencies"
 )
 

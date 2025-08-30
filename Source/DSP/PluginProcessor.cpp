@@ -23,11 +23,15 @@ MyPluginProcessor::MyPluginProcessor()
                        )
 #endif
 {
+    gain = rs::create(0.5);
     if (!vTree.IsValid()) vTree.Create();
 }
 
 MyPluginProcessor::~MyPluginProcessor()
-{}
+{
+    rs::destroy(gain);
+    gain = nullptr;
+}
 
 //==============================================================================
 
@@ -65,6 +69,10 @@ void MyPluginProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce::Mid
     }
 
     // do processing here
+    rs::process(gain, buffer.getReadPointer(0), buffer.getReadPointer(1),
+        buffer.getWritePointer(0), buffer.getWritePointer(1),
+        buffer.getNumSamples()
+    );
 }
 
 const juce::String MyPluginProcessor::getName() const
