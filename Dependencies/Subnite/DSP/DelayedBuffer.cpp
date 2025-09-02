@@ -12,10 +12,10 @@
 
 using namespace subnite;
 
-DelayedBuffer::DelayedBuffer(const int& numChannels, const int& blockSize, const int& samplesLatencyAmount)
-	: buffer(numChannels, blockSize + samplesLatencyAmount),
-	overflowBuffer(numChannels, blockSize % samplesLatencyAmount),
-	numChannels(numChannels), blockSize(blockSize), latencySize(samplesLatencyAmount)
+DelayedBuffer::DelayedBuffer(const int& inChannels, const int& numSamples, const int& samplesLatencyAmount)
+	: buffer(inChannels, numSamples + samplesLatencyAmount),
+	overflowBuffer(inChannels, numSamples % samplesLatencyAmount),
+	numChannels(inChannels), blockSize(numSamples), latencySize(samplesLatencyAmount)
 {
 	jassert(latencySize >= 0);
 	FillBuffersWithZero();

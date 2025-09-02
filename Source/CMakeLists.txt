@@ -121,7 +121,11 @@ target_include_directories(${PLUGIN_PROJECT_NAME}
         "${CMAKE_SOURCE_DIR}/Dependencies"
 )
 
-# target_compile_options (${PLUGIN_PROJECT_NAME} PRIVATE -fdiagnostics-color=always)
+target_compile_options (${PLUGIN_PROJECT_NAME} PRIVATE
+    $<$<CXX_COMPILER_ID:GNU>:-fdiagnostics-color=always>
+    $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:-Wall -Werror> # treat warnings as errors.
+    $<$<CXX_COMPILER_ID:MSVC>:/WX> # warning = error
+)
 set(CMAKE_COLOR_DIAGNOSTICS ON)
 
 

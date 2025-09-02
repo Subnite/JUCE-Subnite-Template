@@ -27,6 +27,11 @@ target_link_libraries(SubniteExtras
         juce::juce_recommended_warning_flags
 )
 
+target_compile_options(SubniteExtras PRIVATE
+    $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:-Wall -Werror> # treat warnings as errors.
+    $<$<CXX_COMPILER_ID:MSVC>:/WX>
+)
+
 target_include_directories(SubniteExtras PRIVATE
     "${JUCE_MODULES_PATH}"
 )

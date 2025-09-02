@@ -2,9 +2,9 @@
 #include <algorithm>
 
 template <typename T>
-subnite::Slider<T>::Slider(T minValue, T maxValue, T defaultValue)
-    : normalizedRawValue(0), displayedValue(defaultValue),
-    minValue(minValue), maxValue(maxValue), defaultValue(defaultValue)
+subnite::Slider<T>::Slider(T min, T max, T initValue)
+    : normalizedRawValue(0), displayedValue(initValue),
+    minValue(min), maxValue(max), defaultValue(initValue)
 {
     jassert(minValue < maxValue); // Minimum value should be lower than max
     jassert(defaultValue >= minValue && defaultValue <= maxValue); // Default value should be between [min : max] inclusive
@@ -50,13 +50,13 @@ std::string subnite::Slider<T>::getValueString() const {
 }
 
 template <typename T>
-void subnite::Slider<T>::setValuePrefix(std::string prefix) {
-    this->prefix = prefix;
+void subnite::Slider<T>::setValuePrefix(std::string newPrefix) {
+    prefix = newPrefix;
 }
 
 template <typename T>
-void subnite::Slider<T>::setValuePostfix(std::string postfix) {
-    this->postfix = postfix;
+void subnite::Slider<T>::setValuePostfix(std::string newPostfix) {
+    postfix = newPostfix;
 }
 
 template <typename T>
@@ -88,10 +88,10 @@ void subnite::Slider<T>::getFromValueTree() {
     auto max = static_cast<double>(slider.getProperty(maxValueID));
     auto displayVal = static_cast<double>(slider.getProperty(displayValueID));
 
-    this->normalizedRawValue = raw;
-    this->minValue = min;
-    this->maxValue = max;
-    this->displayedValue = displayVal;
+    normalizedRawValue = raw;
+    minValue = min;
+    maxValue = max;
+    displayedValue = displayVal;
 
     updateDisplayedValueChecked(true); // we're saving the display value too, but this is still useful for initialization.
 }
@@ -217,15 +217,15 @@ void subnite::Slider<T>::mouseDoubleClick(const juce::MouseEvent& e) {
 
 template <typename T>
 void subnite::Slider<T>::setValueTree(subnite::vt::ValueTreeBase* parentTree, juce::Identifier uniqueSliderTreeID,
-juce::Identifier rawNormalizedValueID, juce::Identifier displayValueID, juce::Identifier minValueID, juce::Identifier maxValueID) {
+juce::Identifier rawNormalizedID, juce::Identifier displayID, juce::Identifier minID, juce::Identifier maxID) {
     vTree = parentTree;
-    this->sliderTreeUniqueID = uniqueSliderTreeID; // the unique tree to look for
+    sliderTreeUniqueID = uniqueSliderTreeID; // the unique tree to look for
 
     // properties
-    this->rawNormalizedValueID = rawNormalizedValueID;
-    this->displayValueID = displayValueID;
-    this->minValueID = minValueID;
-    this->maxValueID = maxValueID;
+    rawNormalizedValueID = rawNormalizedID;
+    displayValueID = displayID;
+    minValueID = minID;
+    maxValueID = maxID;
 
     getFromValueTree();
 }

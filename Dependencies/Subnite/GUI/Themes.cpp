@@ -158,6 +158,8 @@ void CustomTheme::drawRotarySlider(Graphics& g, int x, int y, int width, int hei
 
 void CustomTheme::drawToggleButton(Graphics& g, ToggleButton& button, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
 {
+    juce::ignoreUnused(shouldDrawButtonAsHighlighted);
+    juce::ignoreUnused(shouldDrawButtonAsDown);
     auto buttonBounds = button.getLocalBounds();
 
     float alpha = 1.f;
