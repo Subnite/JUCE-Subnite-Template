@@ -1,6 +1,6 @@
 {
   "env": {
-    "myIncludePath": ["${workspaceFolder}/Source", "${workspaceFolder}/Source/Rust/target/include", "${workspaceFolder}/Dependencies", "/home/subnite/dev/.packages/JUCE/8.0.8/modules"],
+    "myIncludePath": ["${workspaceFolder}/Source", "${workspaceFolder}/Dependencies", "/home/subnite/dev/.packages/JUCE/8.0.8/modules"],
     // "myDefines": ["DEBUG", "MY_FEATURE=1"]
     "myDefines": []
   },

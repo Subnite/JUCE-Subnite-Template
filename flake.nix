@@ -92,9 +92,7 @@
             gcc
             gnumake
             ninja
-            openssl
-            rustc
-            cargo
+            # openssl
             libjack2
           ]) ++ self.packages.${pkgs.system}.juce-build-packages;
 

@@ -4,9 +4,6 @@ bin/
 !.vscode/c_cpp_properties.json
 !.vscode/settings.json
 
-Source/Rust/target/**/*
-!Source/Rust/target/include/
-
 # when copying into this dir it will have the name MyPlugin.vst3/
 *.vst3/
 

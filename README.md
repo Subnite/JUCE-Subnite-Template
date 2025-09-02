@@ -24,6 +24,5 @@ Make sure to check out all the options in the top layer of the CMakeLists.txt an
 
 ### Build flow
 If you want to change the whole configuration, here is the general build flow
-1. build the rust files that the plugin might depend on
-2. include / build JUCE itself
-3. build the plugin
+1. include / build JUCE itself
+2. build the plugin

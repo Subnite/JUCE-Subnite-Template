@@ -28,6 +28,7 @@ MyPluginEditor::~MyPluginEditor()
 //==============================================================================
 void MyPluginEditor::paintOverChildren(juce::Graphics &g)
 {
+    juce::ignoreUnused(g);
 }
 
 void MyPluginEditor::paint(juce::Graphics &g)

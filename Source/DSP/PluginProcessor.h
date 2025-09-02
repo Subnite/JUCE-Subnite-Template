@@ -9,11 +9,14 @@
 #pragma once
 #include <juce_audio_processors/juce_audio_processors.h>
 #include "Commons/PluginValueTree.h"
-#include "rust-bindings.h"
-
-namespace rs = subnite::rust;
 
 //==============================================================================
+
+struct BusSettings {
+    size_t sampleRate = 48000;
+    size_t bufferSize = 512;
+    size_t channels = 2;
+};
 
 class MyPluginProcessor  : public juce::AudioProcessor
 #if JucePlugin_Enable_ARA
@@ -33,7 +36,9 @@ public:
     bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
 #endif
 
+    using juce::AudioProcessor::processBlock; // there is a "double" version of processblock. This let's the bass class handle it.
     void processBlock (juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
+    // void processBlock (juce::AudioBuffer<double>&, juce::MidiBuffer&) = delete;
 
     //==============================================================================
     juce::AudioProcessorEditor* createEditor() override;
@@ -62,13 +67,10 @@ public:
 
     // contains all info that is stored and restored from the plugin data block
     myplugin::vt::ValueTree vTree{};
-    rs::Gain* gain;
 private:
 
-  size_t sampleRate = 48000;
-  size_t samplesPerBlock = 512;
-  size_t numChannels = 2;
-  void busSettingsChanged(size_t sampleRate, size_t samplesPerBlock, size_t channels);
+  BusSettings busSettings;
+  void busSettingsChanged(BusSettings newSettings);
   //==============================================================================
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MyPluginProcessor)
 };

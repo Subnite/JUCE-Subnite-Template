@@ -46,7 +46,7 @@ public:
     // makes the default tree
     void Create() override {
         using prop = Property;
-        using id = juce::Identifier;
+        // using id = juce::Identifier;
 
         // create new trees
         vtRoot = juce::ValueTree{GetIDUnwrapped(prop::T_ROOT)};

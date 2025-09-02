@@ -141,7 +141,7 @@ namespace subnite::vt
     /** Replaces the current tree with the tree found in the data. @return true when the tree is valid.*/
     bool CopyFrom(const void *data, int sizeInBytes)
     {
-        vtRoot = juce::ValueTree::readFromData(data, sizeInBytes);
+        vtRoot = juce::ValueTree::readFromData(data, static_cast<size_t>(sizeInBytes));
         return vtRoot.isValid();
     }
 
@@ -180,7 +180,7 @@ namespace subnite::vt
         juce::ValueTree *oldTree = nullptr;
 
         // auto& would be better but this might be fine
-        for (size_t childIdx = 0; childIdx < tree.getNumChildren(); childIdx++)
+        for (int childIdx = 0; childIdx < tree.getNumChildren(); childIdx++)
         {
             auto child = tree.getChild(childIdx);
             auto name = child.getType().toString();

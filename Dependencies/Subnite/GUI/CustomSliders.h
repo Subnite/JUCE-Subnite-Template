@@ -78,7 +78,7 @@ public:
     };
 
     /** Called whenever the display value changed. */
-    std::function<void(T changedValue)> onValueChanged = [](T c){};
+    std::function<void(T changedValue)> onValueChanged = [](T c){ juce::ignoreUnused(c); };
 
     /** Sets the prefix displayed on the slider. @see paint, getValueString */
     void setValuePrefix(std::string prefix);

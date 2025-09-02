@@ -88,14 +88,8 @@ target_compile_definitions(${PLUGIN_PROJECT_NAME}
 
 message("- [SBNT INFO] Added target compile definitions")
 
-target_link_directories(${PLUGIN_PROJECT_NAME} PUBLIC
-    $<$<CONFIG:Debug>:${CMAKE_CURRENT_SOURCE_DIR}/Rust/target/debug>
-    $<$<CONFIG:Release>:${CMAKE_CURRENT_SOURCE_DIR}/Rust/target/release>
-)
-
 target_link_libraries(${PLUGIN_PROJECT_NAME}
     PRIVATE
-        # AudioPluginData           # If we'd created a binary data target, we'd link to it here
         juce::juce_audio_plugin_client
         juce::juce_audio_basics
         juce::juce_audio_devices
@@ -111,7 +105,6 @@ target_link_libraries(${PLUGIN_PROJECT_NAME}
         juce::juce_gui_extra
 
         SubniteExtras # some extra's like a better value tree (with saving set up)
-        rust_juce_dsp # our rust code if any
     PUBLIC
         juce::juce_recommended_config_flags
         $<$<PLATFORM_ID:Windows>:juce::juce_recommended_lto_flags> # problems with gcc on linux...
@@ -125,7 +118,6 @@ target_include_directories(${PLUGIN_PROJECT_NAME}
     PUBLIC
         "${JUCE_MODULES_PATH}"
         "${CMAKE_CURRENT_SOURCE_DIR}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/Rust/target/include"
         "${CMAKE_SOURCE_DIR}/Dependencies"
 )
 

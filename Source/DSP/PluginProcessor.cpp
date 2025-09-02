@@ -23,20 +23,18 @@ MyPluginProcessor::MyPluginProcessor()
                        )
 #endif
 {
-    gain = rs::create(0.5);
     if (!vTree.IsValid()) vTree.Create();
 }
 
 MyPluginProcessor::~MyPluginProcessor()
 {
-    rs::destroy(gain);
-    gain = nullptr;
 }
 
 //==============================================================================
 
-void MyPluginProcessor::busSettingsChanged(size_t sampleRate, size_t samplesPerBlock, size_t channels) {
-    jassert(channels >= 1);
+void MyPluginProcessor::busSettingsChanged(BusSettings newSettings) {
+    juce::ignoreUnused(newSettings);
+    jassert(newSettings.channels >= 1);
 }
 
 void MyPluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
@@ -46,7 +44,11 @@ void MyPluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 
     // assuming stereo channels
     int channels = getMainBusNumInputChannels();
-    busSettingsChanged(sampleRate, samplesPerBlock, channels); // didn't actually check if they changed, so this can be used as initializer too.
+    busSettingsChanged({
+        .sampleRate = static_cast<size_t>(sampleRate),
+        .bufferSize = static_cast<size_t>(samplesPerBlock),
+        .channels = static_cast<size_t>(channels),
+    }); // didn't actually check if they changed, so this can be used as initializer too.
 }
 
 void MyPluginProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages)
@@ -61,18 +63,20 @@ void MyPluginProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce::Mid
         buffer.clear(i, 0, buffer.getNumSamples());
     }
 
-    if (totalNumInputChannels != this->numChannels || buffer.getNumSamples() != this->samplesPerBlock || getSampleRate() != sampleRate){
-        this->samplesPerBlock = buffer.getNumSamples();
-        this->numChannels = totalNumInputChannels;
-        this->sampleRate = getSampleRate();
-        busSettingsChanged(this->sampleRate, this->samplesPerBlock, this->numChannels);
+    // checking for differing settings
+    auto tInChannels = static_cast<size_t>(totalNumInputChannels);
+    auto tNumSamples = static_cast<size_t>(buffer.getNumSamples());
+    auto tSampleRate = static_cast<size_t>(getSampleRate());
+    if (tInChannels != busSettings.channels || tNumSamples != busSettings.bufferSize || tSampleRate != busSettings.sampleRate){
+        busSettings = {
+            .sampleRate = tSampleRate,
+            .bufferSize = tNumSamples,
+            .channels = tInChannels,
+        };
+        busSettingsChanged(busSettings);
     }
 
-    // do processing here
-    rs::process(gain, buffer.getReadPointer(0), buffer.getReadPointer(1),
-        buffer.getWritePointer(0), buffer.getWritePointer(1),
-        buffer.getNumSamples()
-    );
+    // do processing from here
 }
 
 const juce::String MyPluginProcessor::getName() const

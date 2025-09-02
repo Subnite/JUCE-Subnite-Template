@@ -153,12 +153,14 @@ void subnite::Slider<T>::paint(juce::Graphics& g) {
 
 template <typename T>
 void subnite::Slider<T>::mouseEnter(const juce::MouseEvent& e) {
+    juce::ignoreUnused(e);
     isHovering = true;
     repaint();
 }
 
 template <typename T>
 void subnite::Slider<T>::mouseExit(const juce::MouseEvent& e) {
+    juce::ignoreUnused(e);
     isHovering = false;
     repaint();
 }
