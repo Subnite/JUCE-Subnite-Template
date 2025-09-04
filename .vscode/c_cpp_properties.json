@@ -1,6 +1,6 @@
 {
   "env": {
-    "myIncludePath": ["${workspaceFolder}/Source", "${workspaceFolder}/Dependencies", "/home/subnite/dev/.packages/JUCE/8.0.8/modules"],
+    "myIncludePath": ["${workspaceFolder}/Source", "${workspaceFolder}/Dependencies", "/home/subnite/dev/.packages/JUCE/8.0.8/modules", "C:/Program Files/JUCE/8.0.8/modules"],
     // "myDefines": ["DEBUG", "MY_FEATURE=1"]
     "myDefines": []
   },
@@ -9,6 +9,19 @@
       "name": "Linux",
       "compilerPath": "/run/current-system/sw/bin/g++",
       "intelliSenseMode": "linux-gcc-x64",
+      "includePath": ["${myIncludePath}"],
+      "defines": ["${myDefines}"],
+      "cStandard": "c17",
+      "cppStandard": "c++23",
+    //   "macFrameworkPath": ["/System/Library/Frameworks", "/Library/Frameworks"],
+      "browse": {
+        "path": ["${myIncludePath}", "${workspaceFolder}"]
+      }
+    },
+    {
+      "name": "Windows",
+      "compilerPath": "g++",
+      "intelliSenseMode": "windows-msvc-x64",
       "includePath": ["${myIncludePath}"],
       "defines": ["${myDefines}"],
       "cStandard": "c17",

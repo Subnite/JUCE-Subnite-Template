@@ -89,9 +89,9 @@ void subnite::Slider<T>::getFromValueTree() {
     auto displayVal = static_cast<double>(slider.getProperty(displayValueID));
 
     normalizedRawValue = raw;
-    minValue = min;
-    maxValue = max;
-    displayedValue = displayVal;
+    minValue = static_cast<T>(min);
+    maxValue = static_cast<T>(max);
+    displayedValue = static_cast<T>(displayVal);
 
     updateDisplayedValueChecked(true); // we're saving the display value too, but this is still useful for initialization.
 }
@@ -126,22 +126,22 @@ void subnite::Slider<T>::paint(juce::Graphics& g) {
     bounds = bounds.withSizeKeepingCentre(maxSize, maxSize);
 
     g.setColour(juce::Colours::grey.withLightness(0.3f));
-    g.fillEllipse(bounds.getCentreX()-maxSize/2.f, bounds.getCentreY()-maxSize/2.f, maxSize, maxSize);
+    g.fillEllipse(bounds.getCentreX()-maxSize/2.f, bounds.getCentreY()-maxSize/2.f, static_cast<float>(maxSize), static_cast<float>(maxSize));
 
     // line at value pos
     const double remove = -1.5;
     const double pi = 3.1415;
-    const auto angle = getValueAngle(pi-(remove/2), 0+(remove/2)); // radians
-    auto r = maxSize*0.5*0.8;
+    const float angle = static_cast<float>(getValueAngle(pi-(remove/2), 0+(remove/2))); // radians
+    auto r = maxSize*0.5f*0.8f;
     auto center = bounds.getCentre();
-    float x = r*cos(angle) + center.x;
-    float y = r*-sin(angle) + center.y; // -sin because y 0 is top in juce
+    float x = r*cosf(angle) + center.x;
+    float y = r*-sinf(angle) + center.y; // -sin because y 0 is top in juce
 
     g.setColour(juce::Colours::red);
     g.fillEllipse(x-4, y, 8, 8);
 
     if (isHovering && displayValueOnHover) {
-        auto textBounds = bounds.withSizeKeepingCentre(bounds.getWidth()*0.5f, bounds.getHeight()*0.5f);
+        auto textBounds = bounds.withSizeKeepingCentre(bounds.getWidth()/2, bounds.getHeight()/2);
         g.setColour(juce::Colours::white);
         g.drawFittedText(getValueString(), textBounds, juce::Justification::centredBottom, 20);
     }

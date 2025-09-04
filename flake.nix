@@ -2,14 +2,15 @@
   description = "JUCE flake";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05"; # used as latest
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     juce-src = {
       url = "github:juce-framework/JUCE/8.0.8";
       flake = false;
     };
   };
 
-  outputs = { self, nixpkgs, juce-src }:
+  outputs = { self, nixpkgs, nixpkgs-unstable, juce-src }:
     let
       # Support multiple systems
       supportedSystems = [ "x86_64-linux" ];
@@ -17,11 +18,12 @@
       # Helper function to generate outputs for each system
       forEachSystem = f: nixpkgs.lib.genAttrs supportedSystems (system: f {
         pkgs = import nixpkgs { inherit system; };
+        pkgs-unstable = import nixpkgs-unstable { inherit system; };
       });
     in
     {
       # JUCE package
-      packages = forEachSystem ({ pkgs }: {
+      packages = forEachSystem ({ pkgs, pkgs-unstable }: {
         juce-build-packages = with pkgs; [
           freetype
           fontconfig
@@ -80,7 +82,7 @@
       });
 
       # Development shell
-      devShells = forEachSystem ({ pkgs }: {
+      devShells = forEachSystem ({ pkgs, pkgs-unstable }: {
         default = pkgs.mkShell {
           name = "juce-development-shell";
           buildInputs = [
@@ -89,7 +91,7 @@
             self.packages.${pkgs.system}.juce
           ] ++ (with pkgs; [
             # Additional development tools + rust
-            gcc
+            pkgs-unstable.gcc
             gnumake
             ninja
             # openssl

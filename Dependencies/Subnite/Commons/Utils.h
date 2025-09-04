@@ -39,7 +39,7 @@ namespace subnite::utils
 
     // returns the frequency at a given position from bounds width.
     template <typename T>
-    double GetFreqFromPos(const int& pos, const juce::Rectangle<T>& bounds);
+    double GetFreqFromPos(const T& pos, const juce::Rectangle<T>& bounds);
 
 } // namespace utils
 
