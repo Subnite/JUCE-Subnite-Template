@@ -1,20 +1,26 @@
 /**
  * @file ValueTreeManager.h
  * @author Subnite
- * @brief a valuetree manager based on juce::ValueTree to save and load params.
+ * @brief a valuetree manager built on top of juce::ValueTree to save and load params.
  *
  */
 
 #pragma once
 #include <optional>
 #include <unordered_map>
+#include <type_traits>
+#include <concepts>
 #include <juce_core/juce_core.h>
 #include <juce_data_structures/juce_data_structures.h>
+
 
 namespace subnite::vt
 {
 
     template <typename E_ID>
+    concept EnumType = std::is_enum_v<E_ID>;
+
+    template <EnumType E_ID>
     class IDMap
     {
     protected:
@@ -45,24 +51,19 @@ namespace subnite::vt
          * CALL setupMap() MANUALLY ON CONSTRUCTOR!!
          * The juce vst3 helper crashes when this abstract class tries to call setupMap(), so do it yourself!
          */
-        IDMap()
-        {
-        }
+        inline IDMap() {};
 
         /**
          * get the enum linked with the id
          * @param id The identifier linked with an enum.
          * @return The E_ID::enum linked with id, or std::nullopt if it wasn't found.
          */
-        std::optional<E_ID> GetTypeFromID(const juce::Identifier &id) const
-        {
-            auto it = std::find_if(map.begin(), map.end(), [&id](const std::pair<E_ID, juce::Identifier> &pair)
-                                   {
-                                       return pair.second == id; // Find the pair where value matches
-                                   });
+        std::optional<E_ID> GetTypeFromID(const juce::Identifier &id) const {
+            auto it = std::find_if(map.begin(), map.end(), [&id](const std::pair<E_ID, juce::Identifier> &pair) {
+                return pair.second == id; // Find the pair where value matches
+            });
 
-            if (it != map.end())
-            {
+            if (it != map.end()) {
                 return it->first; // Return key if value is found
             }
             return std::nullopt; // Return an empty optional if value is not found
@@ -74,11 +75,9 @@ namespace subnite::vt
          * @param property The enum that associates to a juce::Identifier.
          * @return The ID linked with the enum, or std::nullopt if not found.
          */
-        std::optional<juce::Identifier> GetIDFromType(const E_ID &property) const
-        {
+        std::optional<juce::Identifier> GetIDFromType(const E_ID &property) const {
             auto it = map.find(property);
-            if (it != map.end())
-            {
+            if (it != map.end()) {
                 return it->second; // Return value if key is found
             }
             return std::nullopt;
@@ -94,9 +93,9 @@ namespace subnite::vt
     {
     public:
     /** Default constructor, doesn't do anything. */
-    ValueTreeBase() {};
+    inline ValueTreeBase() {}
     /** Default destructor, doesn't do anything. */
-    ~ValueTreeBase() {};
+    inline ~ValueTreeBase() {}
 
     // makes a new default tree. Setup the default root (vtRoot) and sub trees yourself.
     /**
@@ -121,26 +120,16 @@ namespace subnite::vt
     virtual void Create() = 0;
 
     /** @return If the root tree is valid. */
-    bool IsValid()
-    {
-        return vtRoot.isValid();
-    }
+    inline bool IsValid() const { return vtRoot.isValid(); }
 
     /** Adds a listener to the root tree. */
-    void AddListener(juce::ValueTree::Listener *listener)
-    {
-        vtRoot.addListener(listener);
-    }
+    inline void AddListener(juce::ValueTree::Listener *listener) { vtRoot.addListener(listener); }
 
     /** @return The undo manager used for all things. Could be nullptr */
-    juce::UndoManager *GetUndoManager()
-    {
-        return &undoManager;
-    }
+    inline juce::UndoManager *GetUndoManager() { return &undoManager; }
 
     /** Replaces the current tree with the tree found in the data. @return true when the tree is valid.*/
-    bool CopyFrom(const void *data, int sizeInBytes)
-    {
+    inline bool CopyFrom(const void *data, int sizeInBytes) {
         vtRoot = juce::ValueTree::readFromData(data, static_cast<size_t>(sizeInBytes));
         return vtRoot.isValid();
     }
@@ -148,14 +137,10 @@ namespace subnite::vt
     /** Writes the current tree to an output stream.
      *  @param stream The stream to write the data to.
      * */
-    void WriteToStream(juce::OutputStream &stream) const
-    {
-        vtRoot.writeToStream(stream);
-    }
+    inline void WriteToStream(juce::OutputStream &stream) const { vtRoot.writeToStream(stream); }
 
     /** Writes the root tree structure to an XML file. Example path: "C:/Dev/tree.xml" */
-    void CreateXML(const juce::String &pathToFile) const
-    {
+    inline void CreateXML(const juce::String &pathToFile) const {
         auto xml = vtRoot.toXmlString();
         juce::XmlDocument doc{xml};
         juce::File file(pathToFile);
@@ -164,7 +149,7 @@ namespace subnite::vt
     }
 
     /** @return The root vtRoot */
-    const juce::ValueTree &GetRoot() const { return vtRoot; }
+    inline const juce::ValueTree &GetRoot() const { return vtRoot; }
 
     /** Recursively looks for a sub-tree matching the ID (not optimized)
      *  @param id The id to look for.
@@ -172,8 +157,7 @@ namespace subnite::vt
      *  @return The tree if found, else nullptr.
      *  !!! This function doesn't work right now !!!
      * */
-    juce::ValueTree *GetChildRecursive(const juce::Identifier &id, juce::ValueTree &tree)
-    {
+    inline juce::ValueTree *GetChildRecursive(const juce::Identifier &id, juce::ValueTree &tree) {
         if (tree.hasType(id))
             return &tree;
 
@@ -224,8 +208,7 @@ namespace subnite::vt
      * This happens recursively through all children (not optimized) !!! Currently only looks at the direct children of the tree !!!
      *
      */
-    void SetChild(const juce::Identifier &id, juce::ValueTree &toTree)
-    {
+    inline void SetChild(const juce::Identifier &id, juce::ValueTree &toTree) {
         auto oldTree = vtRoot.getChildWithName(id);
         // auto oldTree = getChildRecursive(id, vtRoot);
 
@@ -243,7 +226,7 @@ namespace subnite::vt
             }
         }
         else
-    {
+        {
             // it didn't exist so create one
             vtRoot.appendChild(toTree, &undoManager);
         }

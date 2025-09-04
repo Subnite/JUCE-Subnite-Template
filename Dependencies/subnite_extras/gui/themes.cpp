@@ -8,7 +8,7 @@
   ==============================================================================
 */
 
-#include "Themes.h"
+#include "themes.h"
 
 using namespace subnite::themes;
 

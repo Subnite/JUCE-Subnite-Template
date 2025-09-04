@@ -1,4 +1,4 @@
-#include "CustomSliders.h"
+#include "custom_sliders.h"
 #include <algorithm>
 
 template <typename T>

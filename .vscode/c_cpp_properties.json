@@ -1,7 +1,11 @@
 {
   "env": {
-    "myIncludePath": ["${workspaceFolder}/Source", "${workspaceFolder}/Dependencies", "/home/subnite/dev/.packages/JUCE/8.0.8/modules", "C:/Program Files/JUCE/8.0.8/modules"],
+    "jucePathLinux": "/home/subnite/dev/.packages/JUCE/8.0.8/modules",
+    "jucePathWindows": "C:/Program Files/JUCE/8.0.8/modules",
+    "myIncludePath": ["${workspaceFolder}/Source", "${workspaceFolder}/Dependencies"],
+    "dynlibIncludePath": ["${workspaceFolder}/Dependencies/dyn_lib/src/private", "${workspaceFolder}/Dependencies/dyn_lib/src/public",  "${workspaceFolder}/Dependencies", "${workspaceFolder}/Source"],
     // "myDefines": ["DEBUG", "MY_FEATURE=1"]
+    "dynlibDefines": ["SOURCE_EXPORT_SHARED_LIB=1", "JUCE_GLOBAL_MODULE_SETTINGS_INCLUDED=1", "JUCE_MODAL_LOOPS_PERMITTED=1"],
     "myDefines": []
   },
   "configurations": [
@@ -9,26 +13,38 @@
       "name": "Linux",
       "compilerPath": "/run/current-system/sw/bin/g++",
       "intelliSenseMode": "linux-gcc-x64",
-      "includePath": ["${myIncludePath}"],
+      "includePath": ["${myIncludePath}", "${jucePathLinux}"],
       "defines": ["${myDefines}"],
       "cStandard": "c17",
       "cppStandard": "c++23",
     //   "macFrameworkPath": ["/System/Library/Frameworks", "/Library/Frameworks"],
       "browse": {
-        "path": ["${myIncludePath}", "${workspaceFolder}"]
+        "path": ["${myIncludePath}", "${jucePathLinux}", "${workspaceFolder}"]
       }
     },
     {
       "name": "Windows",
       "compilerPath": "g++",
       "intelliSenseMode": "windows-msvc-x64",
-      "includePath": ["${myIncludePath}"],
+      "includePath": ["${myIncludePath}", "${jucePathWindows}"],
       "defines": ["${myDefines}"],
       "cStandard": "c17",
       "cppStandard": "c++23",
     //   "macFrameworkPath": ["/System/Library/Frameworks", "/Library/Frameworks"],
       "browse": {
-        "path": ["${myIncludePath}", "${workspaceFolder}"]
+        "path": ["${myIncludePath}", "${jucePathWindows}", "${workspaceFolder}"]
+      }
+    },
+    {
+      "name": "Windows-dynlib",
+      "compilerPath": "g++",
+      "intelliSenseMode": "windows-msvc-x64",
+      "includePath": ["${dynlibIncludePath}", "${jucePathWindows}"],
+      "defines": ["${myDefines}", "${dynlibDefines}"],
+      "cStandard": "c17",
+      "cppStandard": "c++23",
+      "browse": {
+        "path": ["${myIncludePath}", "${jucePathWindows}", "${workspaceFolder}"]
       }
     }
   ],

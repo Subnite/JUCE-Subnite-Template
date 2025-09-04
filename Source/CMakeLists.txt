@@ -1,3 +1,4 @@
+
 if (SHOULD_BUILD_LIBRARY)
 set(JUCE_MODULES_ONLY ON CACHE BOOL "" FORCE)
 endif()
@@ -28,6 +29,8 @@ add_library(${PLUGIN_STATIC_LIB_NAME} STATIC
 
     ${PLUGIN_SOURCE_FILES}
 )
+
+add_dependencies(${PLUGIN_STATIC_LIB_NAME} SubniteExtras)
 
 target_include_directories(${PLUGIN_STATIC_LIB_NAME} PRIVATE
     ${JUCE_MODULES_PATH}
@@ -67,12 +70,13 @@ juce_add_plugin(${PLUGIN_PROJECT_NAME}
     VST3_COPY_DIR ${POST_BUILD_PLUGIN_COPY_DIR}
 )
 
+add_dependencies(${PLUGIN_PROJECT_NAME} SubniteExtras)
 message("- [SBNT INFO] Added juce plugin")
 
 
 target_sources(${PLUGIN_PROJECT_NAME}
     PRIVATE
-	${PLUGIN_SOURCE_FILES}
+        ${PLUGIN_SOURCE_FILES}
 )
 message("- [SBNT INFO] Added target sources")
 

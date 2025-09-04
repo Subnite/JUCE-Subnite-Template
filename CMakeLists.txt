@@ -4,7 +4,8 @@ set(PLUGIN_PROJECT_NAME "MyPlugin") # preferably no spaces
 set(PLUGIN_VST3_NAME "MyPlugin") # name of the actual vst3 file
 
 set(PLUGIN_STATIC_LIB_NAME ${PLUGIN_PROJECT_NAME}StaticLib) # name of the static library (must differ from plugin project name)
-set(SHOULD_BUILD_LIBRARY FALSE) # IMPORTANT: if true, it will generate a static library instead of the plugin
+set(PLUGIN_DYNAMIC_LIB_NAME ${PLUGIN_PROJECT_NAME}Wrapped) # name of the static library (must differ from plugin project name)
+set(SHOULD_BUILD_LIBRARY TRUE) # IMPORTANT: if true, it will generate a static library instead of the plugin
 
 # Post Build Params
 set(COPY_VST3_AFTER_BUILD TRUE) # will copy to the paths in the list below

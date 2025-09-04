@@ -8,7 +8,7 @@
   ==============================================================================
 */
 
-#include "DelayedBuffer.h"
+#include "delayed_buffer.h"
 
 using namespace subnite;
 

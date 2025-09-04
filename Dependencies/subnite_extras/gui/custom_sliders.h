@@ -3,7 +3,7 @@
 #include <string>
 #include <juce_gui_basics/juce_gui_basics.h>
 #include <juce_graphics/juce_graphics.h>
-#include "../Commons/ValueTreeManager.h"
+#include "../common/value_tree_manager.h"
 
 namespace subnite {
 
