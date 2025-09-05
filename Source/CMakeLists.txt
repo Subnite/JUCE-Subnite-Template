@@ -39,9 +39,9 @@ target_include_directories(${PLUGIN_STATIC_LIB_NAME} PRIVATE
 )
 
 target_compile_options(${PLUGIN_STATIC_LIB_NAME}  PRIVATE
-    $<$<CXX_COMPILER_ID:MSVC>:/Gy # MSVC Enable function-level linking
+    $<$<CXX_COMPILER_ID:MSVC>:/Gy> # MSVC Enable function-level linking
     $<$<CXX_COMPILER_ID:MSVC>:/bigobj> # enables big objects
-    # $<$<CXX_COMPILER_ID:MSVC>:/fsanitize=address # to find memory leaks
+    # $<$<CXX_COMPILER_ID:MSVC>:/fsanitize=address> # to find memory leaks
 )
 
 target_compile_definitions(${PLUGIN_STATIC_LIB_NAME}
