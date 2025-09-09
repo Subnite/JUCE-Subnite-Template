@@ -4,6 +4,8 @@
 #include <iostream>
 #include <vector>
 
+namespace subnite {
+
 template<typename T>
 class RingBuffer{
     unsigned int m_startIndex{};
@@ -14,7 +16,7 @@ class RingBuffer{
 public:
     RingBuffer(size_t maxBufferSize)
     :   m_relativeSize(static_cast<int>(maxBufferSize)), m_buffer(), m_size(maxBufferSize)
-    { 
+    {
         m_buffer.reserve(maxBufferSize);
         m_buffer.resize(maxBufferSize);
     }
@@ -141,3 +143,5 @@ public:
         std::cout << "]\n";
     }
 };
+
+} // namespace

@@ -2,7 +2,8 @@
 #include "common.h"
 #include <memory>
 
-namespace source {
+namespace subnite::dynlib {
+
 enum class MY_API PluginResult {
     Success,
     FailedToSetState,
@@ -13,33 +14,12 @@ enum class MY_API PluginResult {
 };
 
 enum MY_API PluginParameter {
-    GainNormalized,
-    RootNote,
-    Scale,
-    GainAdd,
-    GainReduce,
-    LowerFreq,
-    UpperFreq,
-    Quality,
-    SpectralGateLower,
-    SpectralGateUpper,
-    SpectralGateFalloff,
+    Power,
     Count
 };
 
 struct MY_API PluginState {
-    float gainNormalized = 1.0f;
-    float rootNote = 0; // 12 keys available [A, A#, B, C, C#, D, D#, E, F, F#, G, G#]
-    float scale = 0; // 15 available?
-    float lowerFreq = 250.f; // in Hz
-    float upperFreq = 1500.f; // in Hz
-    float gainAddDB = 11.f;
-    float gainReduceDB = 25.f;
-    float quality = 90.f;
-    float spectralGateLower = .3f;
-    float spectralGateUpper = .5f;
-    float spectralGateFalloff = -16.f;
-    // juce::MemoryBlock juceStateInformation;
+    float power = 1.0f;
 };
 
 class MY_API Plugin {

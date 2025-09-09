@@ -1,6 +1,6 @@
-#include "TParameter.h"
+#include "parameter_t.h"
 
-using namespace source;
+using namespace subnite::dynlib;
 
 void Parameter::Set(float rangedValue) {
     if (rangedValue > this->max) rangedValue = this->max;
@@ -37,6 +37,7 @@ float Parameter::NormalizedToRanged(float normalized) const {
     normalized += min;
     return normalized;
 }
+
 float Parameter::RangedToNormalized(float ranged) const {
     ranged -= min;
     ranged /= (max-min);

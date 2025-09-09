@@ -1,6 +1,9 @@
 #pragma once
 #include <functional>
 #include <vector>
+#include <cmath>
+
+namespace subnite {
 
 enum class InterpolationType{
     LANCZOS
@@ -8,7 +11,7 @@ enum class InterpolationType{
 
 class Interpolation{
 private:
-    inline static std::function<double(double x)> s_lanczosInterpolation = 
+    inline static std::function<double(double x)> s_lanczosInterpolation =
     [](double x)->double{
         const double pi = 3.14159265358979323846;
         const int a = 2; // the higher a, the closer to the sinc function
@@ -28,10 +31,10 @@ private:
 public:
     template<typename DataType>
     inline static std::vector<DataType> Interpolate(
-        const std::vector<DataType>& inputData, 
+        const std::vector<DataType>& inputData,
         unsigned int fromIndex,
         unsigned int toIndex,
-        double stepSize, 
+        double stepSize,
         InterpolationType type)
         {
         std::function<double(double)> kernel;
@@ -57,3 +60,5 @@ public:
         return newData;
     }
 };
+
+} // namespace

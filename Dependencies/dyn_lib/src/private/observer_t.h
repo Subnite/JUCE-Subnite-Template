@@ -2,7 +2,7 @@
 #include "common.h"
 #include <memory>
 
-namespace source {
+namespace subnite::dynlib {
 
 template <typename T>
 struct Observer {

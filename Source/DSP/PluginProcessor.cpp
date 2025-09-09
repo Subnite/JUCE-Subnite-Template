@@ -8,7 +8,7 @@
 
 #include "PluginProcessor.h"
 #include "GUI/PluginEditor.h"
-#include <algorithm>
+// #include <algorithm>
 
 //==============================================================================
 MyPluginProcessor::MyPluginProcessor()
@@ -50,6 +50,28 @@ void MyPluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
         .channels = static_cast<size_t>(channels),
     }); // didn't actually check if they changed, so this can be used as initializer too.
 }
+
+void MyPluginProcessor::prepareToPlayFull(double sampleRate, size_t samplesPerBlock, size_t inChannels, size_t outChannels) {
+    // First set processor's channel layout
+    juce::AudioProcessor::BusesLayout layout;
+    juce::Array<juce::AudioChannelSet> inputBuses;
+    if (inChannels > 0 && inChannels < 3)
+        inputBuses.add( inChannels == 1 ? juce::AudioChannelSet::mono() : juce::AudioChannelSet::stereo());
+    layout.inputBuses = inputBuses;
+
+    juce::Array<juce::AudioChannelSet> outputBuses;
+    if (outChannels > 0 && outChannels < 3)
+        outputBuses.add( outChannels == 1 ? juce::AudioChannelSet::mono() : juce::AudioChannelSet::stereo());
+
+    layout.outputBuses= outputBuses;
+    setBusesLayout(layout);
+
+    // then set sample rate and buffer size details
+    setRateAndBufferSizeDetails(sampleRate, static_cast<int>(samplesPerBlock));
+
+    prepareToPlay(sampleRate, samplesPerBlock);
+}
+
 
 void MyPluginProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages)
 {

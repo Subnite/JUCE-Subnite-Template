@@ -5,7 +5,7 @@
 #include <atomic>
 #include <memory>
 
-namespace source {
+namespace subnite::dynlib {
 
 struct MY_API MessageManagerLock {
     MessageManagerLock();

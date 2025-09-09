@@ -30,6 +30,8 @@ public:
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
+    void prepareToPlayFull(double sampleRate, size_t samplesPerBlock, size_t inChannels, size_t outChannels);
+
     void releaseResources() override;
 
 #ifndef JucePlugin_PreferredChannelConfigurations

@@ -1,9 +1,9 @@
-#include "juce-init.h"
+#include "juce_init.h"
 
 #include <juce_gui_basics/juce_gui_basics.h>
 #include <juce_events/juce_events.h>
 
-using namespace source;
+using namespace subnite::dynlib;
 
 struct MessageManagerLock::Impl {
     Impl() : lock() {}
