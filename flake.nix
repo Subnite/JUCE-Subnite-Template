@@ -5,7 +5,11 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05"; # used as latest
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     juce-src = {
-      url = "github:juce-framework/JUCE/8.0.8";
+      # url = "github:juce-framework/JUCE/${juceVersion}";
+      type = "github";
+      owner = "juce-framework";
+      repo = "JUCE";
+      ref = "8.0.8";
       flake = false;
     };
   };
@@ -14,6 +18,7 @@
     let
       # Support multiple systems
       supportedSystems = [ "x86_64-linux" ];
+      juceVersion = "8.0.8"; # IMPORTANT: we cannot use juce-src.ref for some reason
 
       # Helper function to generate outputs for each system
       forEachSystem = f: nixpkgs.lib.genAttrs supportedSystems (system: f {
@@ -42,7 +47,7 @@
         ];
 
         juce = pkgs.stdenv.mkDerivation {
-          name = "juce-8.0.8";
+          name = "juce-${juceVersion}";
           src = juce-src;
           nativeBuildInputs = [ pkgs.cmake pkgs.pkg-config ];
           buildInputs = self.packages.${pkgs.system}.juce-build-packages
@@ -101,7 +106,7 @@
           # Environment variables for JUCE development
           shellHook = ''
             export JUCE_DRV_PATH=${self.packages.${pkgs.system}.juce}
-            export JUCE_MODULES_PATH=${self.packages.${pkgs.system}.juce}/include/JUCE-8.0.8/modules
+            export JUCE_MODULES_PATH=${self.packages.${pkgs.system}.juce}/include/JUCE-${juceVersion}/modules
             echo "JUCE development shell ready!"
             echo "JUCE is available at: $JUCE_DRV_PATH"
             echo "JUCE modules at: $JUCE_MODULES_PATH"
@@ -110,6 +115,6 @@
       });
 
       # Default package
-      defaultPackage = forEachSystem ({ pkgs }: self.packages.${pkgs.system}.juce);
+      defaultPackage = forEachSystem ({ pkgs, pkgs-unstable }: self.packages.${pkgs.system}.juce);
     };
 }
